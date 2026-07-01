@@ -309,7 +309,7 @@ for idx, dname in sorted_depts:
             </div>
         </div>
     st.markdown(bars_html + """
-        <div style="margin-top:2opx;beckground:#eff6ff;border:1px solid #bfdbfe;
+        <div style="margin-top:20px;beckground:#eff6ff;border:1px solid #bfdbfe;
                     border-radius:10px;padding:12px 14px;font-size:12px;color:#ie40af;">
             <strong>Model:</strong> KNN (k=7) · 102,000 patint · 99.5% accuracy<br>
             <strong>Powered by:</strong> Future Classroom ML
