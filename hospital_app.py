@@ -231,7 +231,7 @@ if submitted:
         'dizziness' : int(dizziness),
         'skin_rash' : int(skin_rash),
         'temprature_level' : temp_map.get(temperature_level, 1),
-        'heart_rate_level' : hr_map.(heart_rate_level, 1),
+        'heart_rate_level' : hr_map.get(heart_rate_level, 1),
         'duration' : dur_map.get(duration, 1),
         'astha' : int(astma),
         'hypertension' : int(hypertension),
