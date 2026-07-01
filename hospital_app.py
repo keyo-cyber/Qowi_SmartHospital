@@ -226,7 +226,7 @@ if submitted:
         'cough' : int(cough),
         'headache' : int(headach),
         'chest_pain' : int(chest_pain),
-        'shortness_breath' : int(shortness_breath)
+        'shortness_breath' : int(shortness_breath),
         'nausea_vomiting' : int(nausea_vomiting),
         'dizziness' : int(dizziness),
         'skin_rash' : int(skin_rash)
