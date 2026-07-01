@@ -217,3 +217,102 @@ with st.form("triage_form"):
         gender = st.selectbox("Gender", options=['Female', 'Male'])
 
     submitted = st.form_submit_button("Get AI Recommendation →")
+
+if submitted:
+    patient = pd.DataFrame([{
+        'age' : age,
+        'gender' : gender_map.get(gender, 0),
+        'fever' : int(fever),
+        'cough' : int(cough),
+        'headache' : int(headach),
+        'chest_pain' : int(chest_pain),
+        'shortness_breath' : int(shortness_breath)
+        'nausea_vomiting' : int(nausea_vomiting),
+        'dizziness' : int(dizziness),
+        'skin_rash' : int(skin_rash)
+        'temprature_level' : temp_map.get(temperature_level, 1),
+        'heart_rate_level' : hr_map.(heart_rate_level, 1),
+        'duration' : dur_map.get(duration, 1),
+        'astha' : int(astma),
+        'hypertension' : int(hypertension),
+        'heart_disease' : int(heart_disease),
+        'chief_complaint' : cc_map.get(chief_complaint, 9)
+    }])
+    patient_scaled = patient.copy()
+    patient_scaled[cols_to_scale] = scaler.transform(patient[cols_to_scale])
+
+pred = model.predict(patient_scaled[fetures])[0]
+proba = model.predict_proba(patient_scaled[features])[0]
+dept_name = dept_map_inv[pred]
+confidence = proba[pred] * 100
+info = DEPT_INFO[dept_name]
+
+st.markdown("---")
+st.markdown("""
+<div style="font-size:22px;font-weight:700;color:#111827;margin-bottom:4px;">AI Recommendation</div>
+<div style="font-size:14px;color:#6b7280;margin-bottom:1.5rem;">Based on the information you provided</div>
+""", unsafe_allow_html=True)
+
+res_col, prob_col = st.colums([3, 2])
+
+with res_col:
+    steps_html : ''.join(
+        f'<div style="display:flex:align-items:center;gap:8px;margin-bottom:6px;">'
+        f'<span style="color:{info["color"]};font-size:14pz;">📍</span>'
+        f'<span style="font-size:14px;color:#374151;">{step}</span></div>
+        for step in info['next']
+    )
+    st.markdown(f"""
+    <div style="background:{info['bg']};border:1.5px solid {info['border']};
+                border-radius:16px;padding:28px 32px:">
+    <div style="frot-size:44;margin-bottom:12px;">{info['icon']}</div>
+    <div style="font-size:26;font-weight:700;color:{info[color']};margin-bottom:8px;">{dept_name}</div>
+    <div style="font-size:14px;color:#374151;margin-bottom:20px;">
+    our AI suggests you visit the <strong>{dept_name}</strong> Departement.
+    </div>
+    <div style="font-size:11px;font-weight:600;color:{info['color']}:text-transform:uppercase;
+                letter-spacing:0.08em;margin-bottom:10px:">what to do next?</div>
+    {steps_html}
+    <div style="margin-top:20px;padding:12px 16px; background:rgba(0,0,0,0.05);
+                border-radius:10px;font-size:12px;color:#6b780;line-height:1.5;">
+            ⚠️This is an AI suggestion, not a medical diagonesisi. Please consult a doctor for further evaluation.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with prob_col:
+    st.markdown(f"""
+    <div style="background:white;bborder:1px solid #e5e7eb;border-radius:16px;padding:24px;">
+        <div style="font-size:14px;font-weight:600;color:#111827;margin-bottom:16px;">
+            Confidence by department
+            </div>
+        """, unsafe_allow_html=True)
+
+sorted_depts = sorted(dept_map_inv.items(), key=lamda x:proba[x[0]], reverse=True)
+bars_html = ""
+for idx, dname in sorted_depts:
+    pct = proba[idx] * 100
+    dinfo = DEPT_INFO[dname]
+    is_top = dname == dept_name
+    bars_html += f"""
+    <div style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+            <span style="font-size:13px;font-weight:{'700'if is_top else '400'};
+                        color:{'#111827' if is_top else '#6b7280'};">
+                    {pct:.if}%
+                </span>
+            </div>
+            <div style="beckground:#f3f4f6;border-radius:6px:height:8px;overflow:hidden;">
+                <div styles="background:{'linear-gradient(90deg, '+dinf['color']+','+dinfo['border']+')' if is_top else '#e5e7eb'};
+                            height:100%;border-radius:6px:width:{pct}%;
+                            transition:width 0.5s ease;"></div>
+            </div>
+        </div>
+    st.markdown(bars_html + """
+        <div style="margin-top:2opx;beckground:#eff6ff;border:1px solid #bfdbfe;
+                    border-radius:10px;padding:12px 14px;font-size:12px;color:#ie40af;">
+            <strong>Model:</strong> KNN (k=7) · 102,000 patint · 99.5% accuracy<br>
+            <strong>Powered by:</strong> Future Classroom ML
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
