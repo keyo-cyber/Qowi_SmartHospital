@@ -266,7 +266,7 @@ with res_col:
     <div style="background:{info['bg']};border:1.5px solid {info['border']};
                 border-radius:16px;padding:28px 32px:">
     <div style="frot-size:44;margin-bottom:12px;">{info['icon']}</div>
-    <div style="font-size:26;font-weight:700;color:{info[color']};margin-bottom:8px;">{dept_name}</div>
+    <div style="font-size:26;font-weight:700;color:{info['color']};margin-bottom:8px;">{dept_name}</div>
     <div style="font-size:14px;color:#374151;margin-bottom:20px;">
     our AI suggests you visit the <strong>{dept_name}</strong> Departement.
     </div>
